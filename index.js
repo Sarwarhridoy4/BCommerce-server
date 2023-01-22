@@ -14,7 +14,7 @@ app.use(express.json());
 
 
 const uri = process.env.uri
-console.log(uri);
+// console.log(uri);
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 async function run() {
@@ -35,7 +35,19 @@ async function run() {
             const result = await ProductCollections.find(query).toArray();
             res.send(result);
             
+        });
+
+        app.get('/products/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log(id);
+            const query = {}
+            const allproduct = await ProductCollections.find(query).toArray();
+            const product = allproduct.filter(pro=>pro._id == id)
+            console.log(product);
+            res.send(product);
+            
         })
+
         
     }
     finally {
