@@ -35,12 +35,28 @@ async function run() {
             res.send(result);
         });
 
+        // get admin user-----
+        app.get('/users/admin/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email };
+            const user = await UserCollection.findOne(query);
+            res.send({ isAdmin: user?.role === 'admin' });
+        });
+
         
         //add product to cart
         app.post('/cart', async (req, res) => {
             const cartinfo = req.body;
             console.log(cartinfo);
             const result = await CartCollections.insertOne(cartinfo);
+            console.log(result);
+            res.send(result);
+        });
+        //add product to inventory
+        app.post('/products', async (req, res) => {
+            const newproduct = req.body;
+            console.log(newproduct);
+            const result = await ProductCollections.insertOne(newproduct);
             console.log(result);
             res.send(result);
         });
