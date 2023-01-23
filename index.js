@@ -89,6 +89,14 @@ async function run() {
             res.send(result);
         });
 
+        //Routes for admin panel
+        // getting all customer list
+        app.get('/customers', async (req, res) => {
+            const query = {}
+            const result = await UserCollection.find(query).toArray();
+            res.send(result);
+            
+        });
         
     }
     finally {
