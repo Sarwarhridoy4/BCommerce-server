@@ -24,12 +24,18 @@ async function run() {
         const CartCollections = client.db("DbUser").collection("CartCollections");
         //add consumers while registering
         app.put('/customers', async (req, res) => {
-            const user = req.body;
-            console.log(user);
-            const result = await UserCollection.insertOne(user);
-            console.log(result);
+            const user = req.body
+            const email = user.email
+            const filter = { email: email }
+            const options = { upsert: true }
+            const updateDoc = {
+                $set: user,
+            }
+            const result = await UserCollection.updateOne(filter, updateDoc, options);
             res.send(result);
         });
+
+        
         //add product to cart
         app.post('/cart', async (req, res) => {
             const cartinfo = req.body;
@@ -56,13 +62,7 @@ async function run() {
             res.send(product);
             
         });
-        //Show All orders
-        app.get('/orders', async (req, res) => {
-            const query = {}
-            const result = await CartCollections.find(query).toArray();
-            res.send(result);
-            
-        });
+        
         //geting individual users cart
         //get order customer and admin
         app.get('/orders/:email', async (req, res) => {
@@ -94,6 +94,14 @@ async function run() {
         app.get('/customers', async (req, res) => {
             const query = {}
             const result = await UserCollection.find(query).toArray();
+            res.send(result);
+            
+        });
+
+        //Show All orders
+        app.get('/orders', async (req, res) => {
+            const query = {}
+            const result = await CartCollections.find(query).toArray();
             res.send(result);
             
         });
